@@ -5,11 +5,13 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float speed = 2f;
     [SerializeField] Transform target;
     [SerializeField] private EnemySpawner spawner;
+    [SerializeField] private HealthBar health;
 
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;
         spawner = FindObjectOfType<EnemySpawner>();
+        health = FindObjectOfType<HealthBar>();
     }
 
     void Update()
@@ -21,13 +23,14 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.CompareTag("Player"))
         {
             Destroy(this.gameObject);
+            health.TakeDamage(20);
             gameObject.SetActive(false);
-            spawner.waves[spawner.currentWave].enemiesCount--;
+           spawner.waves[spawner.currentWave].enemiesCount--;
         }
     }
 }
